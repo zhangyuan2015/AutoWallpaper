@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -15,7 +16,7 @@ namespace AutoWallpaper.Lib.Unsplash
         /// 
         /// </summary>
         /// <returns></returns>
-        public static string GetImgPath()
+        public static string GetImgPath(string[] args)
         {
             string host = "https://api.unsplash.com/photos/random?client_id=f6e65da8c7e88bebb109e98426e0161eeb7a7aed976d11cb46b9ce0e487ee2d4";
             string url = "";
@@ -26,6 +27,10 @@ namespace AutoWallpaper.Lib.Unsplash
 
             try
             {
+                string orientationParam = args.FirstOrDefault(a => a.Contains("orientation="));
+                if (!string.IsNullOrWhiteSpace(orientationParam))
+                    host += "&" + orientationParam;
+                
                 int w = Screen.PrimaryScreen.Bounds.Width;
                 int h = Screen.PrimaryScreen.Bounds.Height;
                 host += "&w=" + w + "&h=" + h;

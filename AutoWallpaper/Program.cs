@@ -1,5 +1,7 @@
 ﻿using AutoWallpaper.Lib;
+using AutoWallpaper.Lib.Bing;
 using AutoWallpaper.Lib.Unsplash;
+using System.Linq;
 
 namespace AutoWallpaper
 {
@@ -7,7 +9,14 @@ namespace AutoWallpaper
     {
         static void Main(string[] args)
         {
-            Utils.SetWallpaper(UnsplashServiceImpl.GetImgPath());
+            if (args.Contains("Bing"))
+            {
+                Utils.SetWallpaper(BingServiceImpl.GetImgPath(args));
+            }
+            else
+            {
+                Utils.SetWallpaper(UnsplashServiceImpl.GetImgPath(args));
+            }
         }
     }
 }

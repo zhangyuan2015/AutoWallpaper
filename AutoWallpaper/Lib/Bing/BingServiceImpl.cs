@@ -17,10 +17,20 @@ namespace AutoWallpaper.Lib.Bing
         /// <returns></returns>
         public static string GetImgPath(string[] args)
         {
-            var idx = args.Any() ? args[0] : new Random().Next(-1, 7).ToString();
-            string host = "http://cn.bing.com/HPImageArchive.aspx?idx=" + idx + "&n=1";
+            string host = "http://cn.bing.com/HPImageArchive.aspx?n=1";
+
+            string idxParam = args.FirstOrDefault(a => a.Contains("idx="));
+            if (!string.IsNullOrWhiteSpace(idxParam))
+                host += "&" + idxParam;
+            else
+            {
+                string idx = new Random().Next(-1, 7).ToString();
+                host += "&idx=" + idx;
+            }
 
             string url = "";
+            string copyright = "";
+            string fileName = "";
             string strHtml = "";
             WebClient wc = new WebClient();
             try
@@ -36,6 +46,11 @@ namespace AutoWallpaper.Lib.Bing
                     Match matche = Regex.Match(strHtml, reg1);
                     if (matche.Groups["ImgUrl"] != null)
                         url = matche.Groups["ImgUrl"].Value.Trim();
+
+                    string reg2 = "<copyright>(?<Copyright>.*?)</copyright>";
+                    Match matche2 = Regex.Match(strHtml, reg2);
+                    if (matche2.Groups["Copyright"] != null)
+                        copyright = matche2.Groups["Copyright"].Value.Trim();
                 }
 
                 if (!string.IsNullOrWhiteSpace(url))
@@ -48,6 +63,8 @@ namespace AutoWallpaper.Lib.Bing
 
                     Uri uri = new Uri(host);
                     url = uri.Scheme + "://" + uri.Host + url;
+
+                    fileName = url.Split('&').FirstOrDefault(a => a.Contains("id=")).Split('=')[1];
                 }
             }
             catch
@@ -55,7 +72,7 @@ namespace AutoWallpaper.Lib.Bing
                 // ignored
             }
 
-            return Utils.SaveFile(url, "Bing", Path.GetFileName(url), strHtml);
+            return Utils.SaveFile(url, "Bing", fileName, strHtml);
         }
 
         #endregion

@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
 [assembly: AssemblyTitle("AutoWallpaper")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("参数说明：Bing，idx=-1~7，orientation=landscape/portrait/squarish")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
 [assembly: AssemblyProduct("AutoWallpaper")]
